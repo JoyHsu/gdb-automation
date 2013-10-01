@@ -2,6 +2,7 @@ file main.elf
 target remote :3333
 set $osp = $sp
 set $sp = $sp - 16
+
 b main.c:5
 c
 call RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE)
@@ -31,8 +32,13 @@ while(*((char *)$welcome_addr) != '\0')
     set $welcome_addr = $welcome_addr + 1
 end
 
-
 #download the content from welcome_address
 dump memory content-of-welcome $welcome_addr-25 $welcome_addr
 
+#Use set logging to save the words that are showed on the terminal, the words are data which are sent to UART. 
+set logging on
+printf "%s",welcome
+set logging off
+
+quit
 
